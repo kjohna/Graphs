@@ -100,7 +100,25 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        q = Queue()
+        parents = {}
+        path = []
+
+        # traverse breadth first until destination is found
+        current = starting_vertex
+        while not current == destination_vertex:
+            # store each neighbor's parent
+            for neighbor in self.vertices[current]:
+                parents[neighbor] = current
+                q.enqueue(neighbor)
+            current = q.dequeue()
+        # reconstruct path using parents dict
+        current = destination_vertex
+        path.insert(0, destination_vertex)
+        while not current == starting_vertex:
+            path.insert(0, parents[current])
+            current = parents[current]
+        return path
 
     def dfs(self, starting_vertex, destination_vertex):
         """
