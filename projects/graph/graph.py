@@ -126,7 +126,35 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        # store visited nodes to prevent inf loop
+        s = Stack()
+        visited = set()
+        parents = {}
+        paths = []
+
+        # traverse depth first until destination is found
+        s.push(starting_vertex)
+        while s.size() > 0:
+            # pop vertex from stack
+            v = s.pop()
+            # store each neighbor's parent
+            for neighbor in self.vertices[v]:
+                parents.setdefault(neighbor, []).append(v)
+            # if v has not been visited:
+            if v not in visited:
+                visited.add(v)
+                s.push(neighbor)
+        # reconstruct paths using parents dict
+        for parent in parents[destination_vertex]:
+            path = []
+            current = parent
+            path.insert(0, destination_vertex)
+            path.insert(0, current)
+            while not current == starting_vertex:
+                path.insert(0, parents[current][0])
+                current = parents[current][0]
+            paths.append(path)
+        return paths
 
 
 if __name__ == '__main__':
@@ -198,7 +226,7 @@ if __name__ == '__main__':
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    print("---")
+    print("---bfs")
     print(graph.bfs(1, 6))
 
     '''
@@ -206,5 +234,5 @@ if __name__ == '__main__':
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    print("---")
+    print("---dfs")
     print(graph.dfs(1, 6))
