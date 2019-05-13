@@ -75,13 +75,24 @@ class Graph:
                 for neighbor in self.vertices[v]:
                     s.push(neighbor)
 
-    def dft_recursive(self, starting_vertex):
+    # note: setting default value for visited here causes it to persist
+    # def dft_recursive(self, starting_vertex, visited=set()):
+    # how to make it not persist:
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        pass  # TODO
+        if visited is None:
+            visited = set()
+        # print, mark as visited
+        print(starting_vertex)
+        visited.add(starting_vertex)
+        # if neighbor has not been visited, call dft_recursive
+        for neighbor in self.vertices[starting_vertex]:
+            if neighbor not in visited:
+                self.dft_recursive(neighbor, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -134,7 +145,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    print("---")
+    print("---dft")
     graph.dft(1)
 
     '''
@@ -152,7 +163,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    print("---")
+    print("---bft")
     graph.bft(1)
 
     '''
@@ -162,7 +173,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    print("---")
+    print("---dft_recursive")
     graph.dft_recursive(1)
 
     '''
