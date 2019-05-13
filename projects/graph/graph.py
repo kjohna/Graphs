@@ -3,32 +3,78 @@ Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
 
+
 class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
+
     def __init__(self):
         self.vertices = {}
+
     def add_vertex(self, vertex):
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
+        self.vertices[vertex] = set()
+
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        pass  # TODO
+        self.vertices[v1].add(v2)
+
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # from collections import deque -> py included version
+        # OR
+        # from utils import Queue
+        # create empty queue
+        q = Queue()
+        # create empty "visited" set
+        visited = set()
+        # starting with first node
+        q.enqueue(starting_vertex)
+        # while queue not empty,
+        while q.size() > 0:
+            # dequeue vertex,
+            v = q.dequeue()
+            # if it has not been visited,
+            if v not in visited:
+                # mark visited, print,
+                visited.add(v)
+                print(v)
+                # enqueue neighbors
+                for neighbor in self.vertices[v]:
+                    q.enqueue(neighbor)
+
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # same as bft but use a stack instead of a queue
+        # from utils import Stack
+        # create empty stack
+        s = Stack()
+        # create empty "visited" set
+        visited = set()
+        # starting with first node
+        s.push(starting_vertex)
+        # while stack not empty,
+        while s.size() > 0:
+            # pop vertex,
+            v = s.pop()
+            # if it has not been visited,
+            if v not in visited:
+                # mark visited, print,
+                visited.add(v)
+                print(v)
+                # push neighbors
+                for neighbor in self.vertices[v]:
+                    s.push(neighbor)
+
     def dft_recursive(self, starting_vertex):
         """
         Print each vertex in depth-first order
@@ -36,6 +82,7 @@ class Graph:
         This should be done using recursion.
         """
         pass  # TODO
+
     def bfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing the shortest path from
@@ -43,6 +90,7 @@ class Graph:
         breath-first order.
         """
         pass  # TODO
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
@@ -50,9 +98,6 @@ class Graph:
         depth-first order.
         """
         pass  # TODO
-
-
-
 
 
 if __name__ == '__main__':
@@ -89,6 +134,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
+    print("---")
     graph.dft(1)
 
     '''
@@ -106,6 +152,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
+    print("---")
     graph.bft(1)
 
     '''
@@ -115,12 +162,14 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
+    print("---")
     graph.dft_recursive(1)
 
     '''
     Valid BFS path:
         [1, 2, 4, 6]
     '''
+    print("---")
     print(graph.bfs(1, 6))
 
     '''
@@ -128,4 +177,5 @@ if __name__ == '__main__':
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
+    print("---")
     print(graph.dfs(1, 6))
