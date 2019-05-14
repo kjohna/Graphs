@@ -1,4 +1,5 @@
 import random
+import queue
 
 
 class User:
@@ -62,7 +63,6 @@ class SocialGraph:
                 friendships.append((f1, f2))
         # randomize
         random.shuffle(friendships)
-        print(friendships)
         # create friendships corresponding to:
         # avgFriendships * numUsers = numFriendships
         numFriendships = avgFriendships * self.lastID // 2
@@ -80,14 +80,30 @@ class SocialGraph:
         The key is the friend's ID and the value is the path.
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        # initialize visited with userID and path to self
+        visited[userID] = [userID]
+        # bfs to get shortest path from userID to userID's extended network
+        q = queue.Queue()
+        q.put(userID)
+        while not q.empty():
+            usr = q.get()
+            for friend in self.friendships[usr]:
+                # if friend has not been visited...
+                if not friend in visited:
+                    # add friends to queue
+                    q.put(friend)
+                    # update visited with path to each friend
+                    tmp = visited[usr].copy()
+                    tmp.append(friend)
+                    visited[friend] = tmp
+
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
-    print(sg.users)
-    print(sg.friendships)
-    # connections = sg.getAllSocialPaths(1)
-    # print(connections)
+    print(f"users: {sg.users}")
+    print(f"friendships: {sg.friendships}")
+    connections = sg.getAllSocialPaths(1)
+    print(f"connections: {connections}")
