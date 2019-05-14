@@ -1,5 +1,6 @@
 import random
 import queue
+import statistics
 
 
 class User:
@@ -107,3 +108,33 @@ if __name__ == '__main__':
     print(f"friendships: {sg.friendships}")
     connections = sg.getAllSocialPaths(1)
     print(f"connections: {connections}")
+
+    counts = []
+    avgDegs = []
+    runs = 100
+    # running a bunch of times, accumulate number of connections and average number of connections
+    for i in range(runs):
+        sg2 = SocialGraph()
+        # 1000 users, avg. 5 rand friends
+        sg.populateGraph(1000, 5)
+        connections2 = sg.getAllSocialPaths(1)
+        count = 0
+        avgDeg = 1
+        # loop through all extended connections
+        for i in range(1, 1001):
+            # count up number of connections
+            if i in connections2:
+                count += 1
+                currDeg = len(connections2[i])
+                # maintain a cumulative moving average length of extended connection
+                # https://en.wikipedia.org/wiki/Moving_average
+                avgDeg = avgDeg + (currDeg - avgDeg) / count
+
+        print(f"count: {count}, percent: {count/10}%, avgDeg: {avgDeg}")
+        # store count of extended connections and avg deg of separation for each run
+        counts.append(count)
+        avgDegs.append(avgDeg)
+
+    countsAvg = statistics.mean(counts)
+    avgDegsAvg = statistics.mean(avgDegs)
+    print(f"For {runs} runs, {countsAvg/10}% of friends in extended network. {round(avgDegsAvg, 2)} degrees of separation between a user and users in extended network.")
