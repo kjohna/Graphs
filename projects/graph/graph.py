@@ -120,6 +120,32 @@ class Graph:
             current = parents[current]
         return path
 
+        # # Another way:
+        # # create an empty queue
+        # q = Queue()
+        # # create an empty visited set
+        # visited = set()
+        # # add a PATH TO the first vertex to the queue
+        # q.enqueue([starting_vertex])
+        # # while the queue is not empty
+        # while q.size() > 0:
+        #     # dequeue the first PATH
+        #     path = q.dequeue()
+        #     # grab the last vertex of the path
+        #     v = path[-1]
+        #     # check if it's our destination
+        #     if v == destination_vertex:
+        #         return path
+        #     # if it has not been visited, mark as visited
+        #     if v not in visited:
+        #         visited.add(v)
+        #         # enqueue PATHS to each of its neighbors in the queue
+        #         for neighbors in self.vertices[v]:
+        #             tmp = path[:]
+        #             # tmp = list(path)
+        #             # tmp = path.copy()
+        #             q.enqueue(tmp.append(neighbor))
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
@@ -155,6 +181,32 @@ class Graph:
                 current = parents[current][0]
             paths.append(path)
         return paths
+
+        # # similar to other way for bfs:
+        # # create an empty stack
+        # s = Stack()
+        # # create an empty visited set
+        # visited = set()
+        # # add a PATH TO the first vertex to the stack
+        # s.push([starting_vertex])
+        # # while the stack is not empty
+        # while s.size() > 0:
+        #     # pop the first PATH
+        #     path = s.pop()
+        #     # grab the last vertex of the path
+        #     v = path[-1]
+        #     # check if it's our destination
+        #     if v == destination_vertex:
+        #         return path
+        #     # if it has not been visited, mark as visited
+        #     if v not in visited:
+        #         visited.add(v)
+        #         # push PATHS to each of its neighbors in the stack
+        #         for neighbors in self.vertices[v]:
+        #             tmp = path[:]
+        #             # tmp = list(path)
+        #             # tmp = path.copy()
+        #             s.push(tmp.append(neighbor))
 
 
 if __name__ == '__main__':
