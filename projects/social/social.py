@@ -22,12 +22,15 @@ class SocialGraph:
         Creates a bi-directional friendship
         """
         if userID == friendID:
-            print("WARNING: You cannot be friends with yourself")
+            # print("WARNING: You cannot be friends with yourself")
+            return False
         elif friendID in self.friendships[userID] or userID in self.friendships[friendID]:
-            print("WARNING: Friendship already exists")
+            # print("WARNING: Friendship already exists")
+            return False
         else:
             self.friendships[userID].add(friendID)
             self.friendships[friendID].add(userID)
+            return True
 
     def addUser(self, name):
         """
@@ -56,20 +59,39 @@ class SocialGraph:
         for i in range(numUsers):
             self.addUser(f"User {i + 1}")
 
-        # Create friendships
-        friendships = []
-        # create all possible friend combinations
-        for f1 in range(1, self.lastID + 1):
-            for f2 in range(f1 + 1, self.lastID + 1):
-                friendships.append((f1, f2))
-        # randomize
-        random.shuffle(friendships)
-        # create friendships corresponding to:
+        # # Create friendships
+        # # First Way: O(n^2)
+        # friendships = []
+        # # create all possible friend combinations
+        # for f1 in range(1, numUsers + 1):
+        #     for f2 in range(f1 + 1, numUsers + 1):
+        #         friendships.append((f1, f2))
+        # # randomize
+        # random.shuffle(friendships)
+        # # create friendships corresponding to:
+        # # avgFriendships * numUsers = numFriendships
+        # numFriendships = avgFriendships * numUsers // 2
+        # for friendship in range(numFriendships):
+        #     f = friendships[friendship]
+        #     self.addFriendship(f[0], f[1])
+
+        # Create Friendships
+        # Second Way: O(n)
         # avgFriendships * numUsers = numFriendships
-        numFriendships = avgFriendships * self.lastID // 2
-        for friendship in range(numFriendships):
-            f = friendships[friendship]
-            self.addFriendship(f[0], f[1])
+        # loop once through all users
+        numFriendships = 0
+        for user in range(1, numUsers):
+            # determine number of friends each user will have, should average out to avgFriendships for large numUsers
+            numFriends = random.randrange(avgFriendships + 1)
+            numFriendships += numFriends
+            # create frienship for each user
+            for f in range(numFriends):
+                friend = random.randrange(1, numUsers + 1)
+                # redo if friendship not created
+                while not self.addFriendship(user, friend):
+                    friend = random.randrange(1, numUsers)
+        # check on avg numFriends created per user
+        return numFriendships / numUsers * 2
 
     def getAllSocialPaths(self, userID):
         """
@@ -111,12 +133,13 @@ if __name__ == '__main__':
 
     counts = []
     avgDegs = []
+    avgFriends = []
     runs = 100
     # running a bunch of times, accumulate number of connections and average number of connections
     for i in range(runs):
         sg2 = SocialGraph()
         # 1000 users, avg. 5 rand friends
-        sg.populateGraph(1000, 5)
+        avgFriends.append(sg.populateGraph(1000, 5))
         connections2 = sg.getAllSocialPaths(1)
         count = 0
         avgDeg = 1
@@ -137,4 +160,5 @@ if __name__ == '__main__':
 
     countsAvg = statistics.mean(counts)
     avgDegsAvg = statistics.mean(avgDegs)
-    print(f"For {runs} runs, {countsAvg/10}% of friends in extended network. {round(avgDegsAvg, 2)} degrees of separation between a user and users in extended network.")
+    avgFriendsAvg = statistics.mean(avgFriends)
+    print(f"For {runs} runs, avg friends per user: {round(avgFriendsAvg, 2)}, \n{countsAvg/10}% of friends in extended network. \n{round(avgDegsAvg, 2)} degrees of separation between a user and users in extended network.")

@@ -60,3 +60,25 @@ Note that in this sample, Users 3, 4 and 9 are not in User 1's extended social n
 1. You might have found the results from question #2 above to be surprising. Would you expect results like this in real life? If not, what are some ways you could improve your friendship distribution model for more realistic results?
 
 2. If you followed the hints for part 1, your `populateGraph()` will run in O(n^2) time. Refactor your code to run in O(n) time. Are there any tradeoffs that come with this implementation?
+
+fast
+For 100 runs, avg friends per user: 4.99,
+96.67% of friends in extended network.
+5.44 degrees of separation between a user and users in extended network.
+For 100 runs, avg friends per user: 4.99,
+98.569% of friends in extended network.
+5.41 degrees of separation between a user and users in extended network.
+For 100 runs, avg friends per user: 4.98,
+95.60900000000001% of friends in extended network.
+5.31 degrees of separation between a user and users in extended network.
+
+slow
+For 100 runs, avg friends per user: 5.0,
+98.329% of friends in extended network.
+5.43 degrees of separation between a user and users in extended network.
+For 100 runs, avg friends per user: 5.0,
+99.315% of friends in extended network.
+5.47 degrees of separation between a user and users in extended network.
+For 100 runs, avg friends per user: 5.0,
+99.304% of friends in extended network.
+5.46 degrees of separation between a user and users in extended network.
